@@ -1,5 +1,8 @@
 import java.util.*;
 
+
+//TEST
+
 public class Aggregation extends Declaration {
 
 	private Role container;
