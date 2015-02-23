@@ -15,7 +15,7 @@ public class Operation {
 		for (DataItem dataItem : argList) {
 			arguments += (dataItem.getType() + " " + dataItem.getIdentifier() + ",");
 		}
-		System.out.println("------------" + type + " "
+		System.out.println("--------" + type + " "
 							+ identifier +"(" + arguments + ")" );
 		
 	}

@@ -20,7 +20,8 @@ public class TextParser {
 		//Lire ligne par ligne
 		while ((lineReading = br.readLine()) != null) {
 			
-			//Séparer chaque mots dans un tableau
+			//Séparer chaque mots dans un tableau en igonrant les
+			//parenthèse et les virgules
 			lineReading = lineReading.replace(":", " : ");
 			lineReading = lineReading.replace(";", " ; ");
 			String[] wordList = lineReading.split("\\s+|\\(|\\)|\\,");
@@ -31,6 +32,8 @@ public class TextParser {
 					words.add(wordList[i]);
 		}
 		br.close();
+		
+		System.out.println(words);
 
 		//Parser les déclarations
 		modelName = words.get(1);
@@ -54,10 +57,10 @@ public class TextParser {
 	
 	private int parseClass(int i){
 		i++;
-		ClassDec classDec = new ClassDec();
-		classDec.setIdentifier(words.get(i));
+		ClassDec classDec = getClassDecById(words.get(i));
 		i+=2;
 		
+		//Parser les attributs
 		while(! (words.get(i).contains("OPERATIONS"))){
 			DataItem attribute = new DataItem();
 			attribute.setIdentifier(words.get(i));
@@ -65,13 +68,12 @@ public class TextParser {
 			classDec.addAttribute(attribute);
 			i+=3;
 		}
-		
 		i++;
+		
+		//Parser les opérations
 		while(! (words.get(i).contains(";"))){
 			Operation operation = new Operation();
 			operation.setIdentifier(words.get(i));
-			//System.out.println("allo " + words.get(i));
-			//System.out.println(words.get(i).contains(":"));
 			while(! (words.get(i+1).contains(":")) ){
 				DataItem argument = new DataItem();
 				argument.setIdentifier(words.get(i+1));
@@ -83,8 +85,6 @@ public class TextParser {
 			classDec.addOperation(operation);
 			i+=3;
 		}
-		
-		declarationList.add(classDec);
 		
 		return i;
 	}
@@ -99,9 +99,20 @@ public class TextParser {
 	
 	private int parseGeneralization(int i){
 		i++;
-		while(! (words.get(i).contains(";"))){
-			i++;
+		
+		//Setter la classe parente
+		Generalization generalization = new Generalization();
+		ClassDec parentClassDec = getClassDecById(words.get(i));
+		generalization.setParentClass(parentClassDec);
+		//Ajouter les enfants
+		i+=2;
+		while(!words.get(i).contains(";")) {
+			generalization.addSubClass(getClassDecById(words.get(i)));
+			i+=1;
 		}
+		
+		declarationList.add(generalization);
+		
 		return i;
 	}
 	
@@ -118,6 +129,20 @@ public class TextParser {
 		System.out.println("Model: "+ modelName);
 		for(int i=0; i<declarationList.size(); i++)
 			declarationList.get(i).myPrint();
+	}
+	
+	//Retourne la classe si elle existe déjà, sinon en retourne
+	//une nouvelle avec le bon identifier
+	private ClassDec getClassDecById(String identifier){
+		for (Declaration declaration : declarationList) {
+			if (declaration instanceof ClassDec)
+				if (((ClassDec) declaration).getIdentifier().equals(identifier))
+					return (ClassDec) declaration;					
+		}
+		ClassDec classDec = new ClassDec();
+		classDec.setIdentifier(identifier);
+		declarationList.add(classDec);
+		return classDec;
 	}
 	
 	//Getters ans Setters

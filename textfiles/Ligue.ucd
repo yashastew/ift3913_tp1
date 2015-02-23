@@ -10,6 +10,10 @@ OPERATIONS
 CLASS Participant 
 ATTRIBUTES nom:String OPERATIONS ;
 
+GENERALIZATION Participant
+	SUBCLASSES Joueur, Entraineur
+;
+
 CLASS Joueur
 ATTRIBUTES 
       saison : Integer,
@@ -17,12 +21,6 @@ ATTRIBUTES
 OPERATIONS 
       nombre_saisons() : Integer,
       change_statut (st : String) : void
-;
-
-CLASS Entraineur
-ATTRIBUTES 
-      degre : Integer
-OPERATIONS 
 ;
 
 CLASS Stade 
@@ -33,9 +31,20 @@ OPERATIONS
       Utilise_par(eq : Equipe, annee : Integer) : Boolean
 ;
 
-GENERALIZATION Participant
-	SUBCLASSES Joueur, Entraineur
+CLASS Entraineur
+ATTRIBUTES 
+      degre : Integer
+OPERATIONS 
 ;
+
+
+
+
+
+GENERALIZATION Stade
+	SUBCLASSES Chose1, Chose2
+;
+
 
 RELATION est_localisee_a 
        ROLES
