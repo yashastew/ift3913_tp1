@@ -3,15 +3,15 @@ CLASS Equipe
 ATTRIBUTES 
       nom_equipe : String
 OPERATIONS
-      nombre_joueurs( ) : Integer,
+      nombre_joueurs() : Integer,
       entraineur() : String,
-      add_joueur(element : Joueur) : void;
+      add_joueur(element : Joueur) : void
+;
 
 CLASS Participant 
-ATTRIBUTES nom:String OPERATIONS ;
-
-GENERALIZATION Participant
-	SUBCLASSES Joueur, Entraineur
+ATTRIBUTES 
+nom : String
+OPERATIONS 
 ;
 
 CLASS Joueur
@@ -23,6 +23,12 @@ OPERATIONS
       change_statut (st : String) : void
 ;
 
+CLASS Entraineur
+ATTRIBUTES 
+      degre : Integer
+OPERATIONS 
+;
+
 CLASS Stade 
 ATTRIBUTES 
       nom : String,
@@ -31,20 +37,9 @@ OPERATIONS
       Utilise_par(eq : Equipe, annee : Integer) : Boolean
 ;
 
-CLASS Entraineur
-ATTRIBUTES 
-      degre : Integer
-OPERATIONS 
+GENERALIZATION Participant
+	SUBCLASSES Joueur, Entraineur
 ;
-
-
-
-
-
-GENERALIZATION Stade
-	SUBCLASSES Chose1, Chose2
-;
-
 
 RELATION est_localisee_a 
        ROLES
@@ -63,4 +58,13 @@ CONTAINER
        CLASS Equipe ONE
 PARTS
        CLASS Joueur ONE_OR_MANY
+       CLASS Entraineur ONE_OR_MANY,
+;
+
+AGGREGATION 
+CONTAINER 
+       CLASS Stade ONE
+PARTS
+       CLASS Joueur UNDEFINED
+       CLASS Participant ONE_OR_MANY,
 ;

@@ -91,9 +91,15 @@ public class TextParser {
 	
 	private int parseAssociation(int i){
 		i++;
-		while(! (words.get(i).contains(";"))){
-			i++;
-		}
+		Association association = new Association();
+		association.setIdentifier(words.get(i));
+		association.addRole(getClassDecById(words.get(i+3)),
+											Multiplicity.valueOf(words.get(i+4)));
+		association.setIdentifier(words.get(i));
+		association.addRole(getClassDecById(words.get(i+6)),
+											Multiplicity.valueOf(words.get(i+7)));
+		i+=8;
+		declarationList.add(association);
 		return i;
 	}
 	
@@ -117,10 +123,19 @@ public class TextParser {
 	}
 	
 	private int parseAggregation(int i){
-		i++;
+		//Ajouter les container
+		Aggregation aggregation = new Aggregation();
+		aggregation.setContainer(getClassDecById(words.get(i+3)),
+								Multiplicity.valueOf(words.get(i+4)));
+		//Ajouter les parts
+		i+=6;
 		while(! (words.get(i).contains(";"))){
-			i++;
+			aggregation.addPart(getClassDecById(words.get(i+1)),
+								Multiplicity.valueOf(words.get(i+2)));
+			i+=3;
 		}
+		
+		declarationList.add(aggregation);
 		return i;
 	}
 
