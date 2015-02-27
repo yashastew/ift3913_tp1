@@ -1,13 +1,15 @@
 import java.io.IOException;
 
+import javax.swing.JFrame;
 
 
-public class main {
+
+public class Main {
 	
 	private static String fileName = "textfiles/Ligue.ucd";
 	private static TextParser textParser;
 	
-	public static void main(String[] args) {
+	public static void main(String [] args) {
 		
 		
 		
@@ -19,6 +21,11 @@ public class main {
 			System.out.println("Could not read file");
 			e.printStackTrace();
 		}
+		
+		JFrame frame = new GUI(textParser);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("UML viewer");
+		frame.setVisible(true);
 
 	}
 

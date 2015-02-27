@@ -31,6 +31,9 @@ public class Association extends Declaration {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+	public ArrayList<Role> getRoles(){
+		return this.roles;
+	}
 	
 	
 

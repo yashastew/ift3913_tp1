@@ -39,4 +39,11 @@ public class ClassDec extends Declaration {
 		this.identifier = identifier;
 	}
 
+	public Operation[] getOperations(){
+		return operationList.toArray((new Operation[operationList.size()]));
+	}
+	public DataItem[] getAttributes(){
+		return attributeList.toArray((new DataItem[attributeList.size()]));
+	}
+
 }

@@ -38,5 +38,8 @@ public class Aggregation extends Declaration {
 		role.setMultiplicity(multiplicity);
 		container = role;
 	}
+	public ArrayList<Role> getParts(){
+		return parts;
+	}
 
 }
