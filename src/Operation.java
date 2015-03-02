@@ -37,5 +37,8 @@ public class Operation {
 	public void setType(String type) {
 		this.type = type;
 	}
+	public ArrayList<DataItem> getArgs(){
+		return argList;
+	}
 
 }
