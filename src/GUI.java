@@ -3,11 +3,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -17,14 +15,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class GUI extends JFrame {
-	private static final int FRAME_HEIGHT = 400;
-	private static final int FRAME_WIDTH = 400;
+	private static final int FRAME_HEIGHT = 430;
+	private static final int FRAME_WIDTH = 500;
 
 	private int selectedClass = 0;
 	private int selectedAsso = 0;
@@ -49,14 +45,13 @@ public class GUI extends JFrame {
 
 	public GUI(TextParser tp) {
 		this.tp = tp;
-		// initLists(tp);
-		getClassNames();
+		setClassNames();
 		createComponents();
-		setSize(FRAME_HEIGHT, FRAME_WIDTH);
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 	}
 
-	// should really have been called SET clasNames
-	private void getClassNames() {
+	// initialise les noms des classes
+	private void setClassNames() {
 		classes.clear();
 		for (Declaration d : tp.getDeclarationList()) {
 			if (d instanceof ClassDec) {
@@ -69,6 +64,7 @@ public class GUI extends JFrame {
 		details.clear();
 	}
 
+	// Met a jour les details
 	private void updateDetails() {
 		details.clear();
 		String temp = associations.getElementAt(selectedAsso);
@@ -108,14 +104,14 @@ public class GUI extends JFrame {
 
 					if (containsAll) {
 						details.addElement("AGGREGATION");
-						details.addElement("CONTAINER");
-						details.addElement("CLASS "
+						details.addElement("    CONTAINER");
+						details.addElement("        CLASS "
 								+ a.getContainer().getClassRole()
 										.getIdentifier()
 								+ a.getContainer().getMultiplicity().toString());
-						details.addElement("PARTS");
+						details.addElement("    PARTS");
 						for (Role r : ((Aggregation) d).getParts()) {
-							details.addElement("CLASS"
+							details.addElement("        CLASS"
 									+ (r.getClassRole().getIdentifier()));
 						}
 
@@ -130,9 +126,9 @@ public class GUI extends JFrame {
 			if (d instanceof Association) {
 				if (((Association) d).getIdentifier().equals(as)) {
 					details.addElement("RELATION " + as);
-					details.addElement("ROLES");
+					details.addElement("    ROLES");
 					for (Role r : ((Association) d).getRoles()) {
-						details.addElement("CLASS "
+						details.addElement("        CLASS "
 								+ r.getClassRole().getIdentifier() + " "
 								+ r.getMultiplicity().toString());
 					}
@@ -142,6 +138,7 @@ public class GUI extends JFrame {
 
 	}
 
+	// met a jour les associations
 	private void updateAsso() {
 		associations.clear();
 		for (Declaration d : tp.getDeclarationList()) {
@@ -168,6 +165,7 @@ public class GUI extends JFrame {
 		}
 	}
 
+	// Met a jour les sous classes
 	private void updateSubClasses() {
 		sousClasses.clear();
 		for (Declaration g : tp.getDeclarationList()) {
@@ -182,6 +180,7 @@ public class GUI extends JFrame {
 		}
 	}
 
+	// met a jour les attributs
 	private void updateAttributes() {
 		attributes.clear();
 		for (Declaration d : tp.getDeclarationList()) {
@@ -197,6 +196,7 @@ public class GUI extends JFrame {
 		}
 	}
 
+	// met a jour les methodes
 	private void updateMethodes() {
 		methodes.clear();
 
@@ -221,22 +221,22 @@ public class GUI extends JFrame {
 		}
 
 	}
-
+	//cree et met les valeurs initiales 
 	private void createComponents() {
-		chargerButton = new JButton("charger");
-		fileToLoadField = new JTextField("Ligue.ucd");
+		chargerButton = new JButton("Charger");
+		fileToLoadField = new JTextField(10);
+		fileToLoadField.setText("Ligue.ucd");
 		final JFileChooser fc = new JFileChooser();
 
 		chargerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				fc.showOpenDialog(GUI.this);
-				tp = new TextParser();// is this OK...i assume its Java so no
-										// worrries about the old tp
+				tp = new TextParser();
 				tp.setFileName(fc.getSelectedFile().toString());
 				fileToLoadField.setText(fc.getSelectedFile().toString());
 				try {
 					tp.parseFile();
-					getClassNames();
+					setClassNames();
 				} catch (IOException e) {
 					System.out.println("Could not read file");
 					e.printStackTrace();
@@ -244,7 +244,7 @@ public class GUI extends JFrame {
 
 			}
 		});
-
+		//initilise les JLists
 		classesList = new JList<String>(classes);
 		methodesList = new JList<String>(methodes);
 		attributesList = new JList<String>(attributes);
@@ -252,21 +252,12 @@ public class GUI extends JFrame {
 		associationsList = new JList<String>(associations);
 		detailsList = new JList<String>(details);
 
-		classesList.setVisibleRowCount(15);
-		methodesList.setVisibleRowCount(7);
-		attributesList.setVisibleRowCount(7);
-		sousClassesList.setVisibleRowCount(7);
-		associationsList.setVisibleRowCount(7);
-		detailsList.setVisibleRowCount(5);
+		setVisiblePanelSize();
+		createFChooserPanel();
 
-		JPanel chooseFPanel = new JPanel();
-		chooseFPanel.add(chargerButton);
-		chooseFPanel.add(fileToLoadField);
-		add(chooseFPanel, BorderLayout.NORTH);
 
-		JPanel classePanel = new JPanel();
-		classePanel.add(classesList);
 
+		//set Selection modes
 		classesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		classesList.getSelectionModel().addListSelectionListener(
 				new classListDataListener());
@@ -275,13 +266,17 @@ public class GUI extends JFrame {
 		associationsList.getSelectionModel().addListSelectionListener(
 				new assoListDataListener());
 
-		// Make these guys non-selectable
-		// not doing anything
-		detailsList.getSelectionModel().setSelectionInterval(-1, -1);
-		methodesList.getSelectionModel().setSelectionInterval(-1, -1);
-		sousClassesList.getSelectionModel().setSelectionInterval(-1, -1);
-		attributesList.getSelectionModel().setSelectionInterval(-1, -1);
+		// Empeche lùtilisateur de selectionner des elements
+		//malheuresement ils sont girs pale mais je crois c'est
+		//un solution acceptable 
+		detailsList.setEnabled(false);
+		methodesList.setEnabled(false);
+		sousClassesList.setEnabled(false);
+		attributesList.setEnabled(false);
 
+		JPanel classePanel = new JPanel();
+		JScrollPane jspc = new JScrollPane(classesList);
+		classePanel.add(jspc);
 		classePanel.setBorder(new TitledBorder("Classes"));
 		add(classePanel, BorderLayout.WEST);
 
@@ -291,58 +286,84 @@ public class GUI extends JFrame {
 		rectangle.setLayout(new BorderLayout());
 
 		JPanel attributesPanel = new JPanel();
-		attributesPanel.add(attributesList);
+		JScrollPane jspat = new JScrollPane(attributesList);
+		attributesPanel.add(jspat);
 		attributesPanel.setBorder(new TitledBorder("Attributs"));
 		square.add(attributesPanel);
 
 		JPanel methodesPanel = new JPanel();
-		methodesPanel.add(methodesList);
-		methodesPanel.setBorder(new TitledBorder("Methodes"));
+		JScrollPane jspm = new JScrollPane(methodesList);
+		methodesPanel.add(jspm);
+		methodesPanel.setBorder(new TitledBorder("Méthodes"));
 		square.add(methodesPanel);
 
 		JPanel sousClassesPanel = new JPanel();
-		sousClassesPanel.add(sousClassesList);
+		JScrollPane jspsp = new JScrollPane(sousClassesList);
+		sousClassesPanel.add(jspsp);
 		sousClassesPanel.setBorder(new TitledBorder("Sous-Classes"));
 		square.add(sousClassesPanel);
 
 		JPanel associationsPanel = new JPanel();
-		associationsPanel.add(associationsList);
-		associationsPanel.setBorder(new TitledBorder("Associations"));
+		JScrollPane jspas = new JScrollPane(associationsList);
+		associationsPanel.add(jspas);
+		associationsPanel.setBorder(new TitledBorder("Associations/agrégations"));
 		square.add(associationsPanel);
 
 		JPanel detailsPanel = new JPanel();
 		JScrollPane jsp = new JScrollPane(detailsList);
 		detailsPanel.add(jsp);
-		detailsPanel.setBorder(new TitledBorder("Details"));
+		detailsPanel.setBorder(new TitledBorder("Détails"));
 		rectangle.add(detailsPanel, BorderLayout.SOUTH);
 		rectangle.add(square, BorderLayout.CENTER);
 		add(rectangle, BorderLayout.CENTER);
 
 	}
+	private void createFChooserPanel() {
+		JPanel chooseFPanel = new JPanel();
+		chooseFPanel.add(chargerButton);
+		chooseFPanel.add(fileToLoadField);
+		add(chooseFPanel, BorderLayout.NORTH);
+		
+	}
+
+	//ajuste la grandeur des JLists
+	private void setVisiblePanelSize() {
+				classesList.setVisibleRowCount(17);
+				classesList.setFixedCellWidth(100);
+				classesList.setFixedCellHeight(18);
+				methodesList.setVisibleRowCount(4);
+				methodesList.setFixedCellWidth(160);
+				methodesList.setFixedCellHeight(18);
+				attributesList.setVisibleRowCount(4);
+				attributesList.setFixedCellWidth(160);
+				attributesList.setFixedCellHeight(18);
+				sousClassesList.setVisibleRowCount(4);
+				sousClassesList.setFixedCellWidth(160);
+				sousClassesList.setFixedCellHeight(18);
+				associationsList.setVisibleRowCount(4);
+				associationsList.setFixedCellWidth(160);
+				associationsList.setFixedCellHeight(18);
+				detailsList.setVisibleRowCount(5);
+				detailsList.setFixedCellWidth(320);
+				detailsList.setFixedCellHeight(18);
+		
+	}
 
 	class classListDataListener implements ListSelectionListener {
 
 		@Override
-		// so right not the clear selection is a hacky work around but it works
-		// its calling everything twice but at least the final one ( that you
-		// see in the
-		// GUI is correct
 		public void valueChanged(ListSelectionEvent e) {
 			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 			if (lsm.isSelectionEmpty()) {
-			}// do nothing or there may be a meltdown
+			}
 			else if (!e.getValueIsAdjusting()) {
-				// selectedClass=e.getFirstIndex();
 				selectedClass = lsm.getMinSelectionIndex();
 				updateMethodes();
 				updateAttributes();
 				updateSubClasses();
 				updateAsso();
 				clearDetails();
-				// classesList.clearSelection();
 			}
-			// updateAtributs();
-
 		}
 
 	}
@@ -354,30 +375,11 @@ public class GUI extends JFrame {
 			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 			if (lsm.isSelectionEmpty()) {
 			} else if (!e.getValueIsAdjusting()) {
-				// selectedAsso=e.getFirstIndex();
 				selectedAsso = lsm.getMinSelectionIndex();
 				updateDetails();
-				// associationsList.clearSelection();
 			}
-			// updateAtributs();
 
 		}
-		/*
-		 * public void valueChanged(ListSelectionEvent e) { ListSelectionModel
-		 * lsm = (ListSelectionModel)e.getSource();
-		 * 
-		 * int firstIndex = e.getFirstIndex(); int lastIndex = e.getLastIndex();
-		 * boolean isAdjusting = e.getValueIsAdjusting();
-		 * output.append("Event for indexes " + firstIndex + " - " + lastIndex +
-		 * "; isAdjusting is " + isAdjusting + "; selected indexes:");
-		 * 
-		 * if (lsm.isSelectionEmpty()) { output.append(" <none>"); } else { //
-		 * Find out which indexes are selected. int minIndex =
-		 * lsm.getMinSelectionIndex(); int maxIndex =
-		 * lsm.getMaxSelectionIndex(); for (int i = minIndex; i <= maxIndex;
-		 * i++) { if (lsm.isSelectedIndex(i)) { output.append(" " + i); } } }
-		 * output.append(newline); }
-		 */
 
 	}
 
