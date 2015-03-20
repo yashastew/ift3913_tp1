@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 public class main {
 	
-	//test pour github
+	//test git
 	
 	private static String fileName = "textfiles/Ligue.ucd";
 	private static TextParser textParser;
