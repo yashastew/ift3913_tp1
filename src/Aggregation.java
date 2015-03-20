@@ -42,4 +42,10 @@ public class Aggregation extends Declaration {
 		return parts;
 	}
 
+
+
+	public String getIdentifier() {
+		return "";
+	}
+
 }

@@ -11,6 +11,7 @@ public class TextParser {
 	private String fileName = "";
 	private String modelName = "";
 	private ArrayList<String> words = new ArrayList<String>();
+	private MetricCalculator metricCalculator = new MetricCalculator(declarationList);
 	
 	public void parseFile() throws IOException {
 		FileInputStream inputStream = new FileInputStream(fileName);
@@ -51,11 +52,17 @@ public class TextParser {
 		
 		System.out.println("Il y a "+declarationList.size() + " declarations");
 		myPrint();
-		//System.out.println(words);
+		
+		//Pour tests seulement
+		calculateMetric("Participant");
+
 	}
 	
+	public void calculateMetric(String identifier){
+		metricCalculator.calculateMetric(identifier);
+	}
 	
-	private int parseClass(int i){
+ 	private int parseClass(int i){
 		i++;
 		ClassDec classDec = getClassDecById(words.get(i));
 		i+=2;

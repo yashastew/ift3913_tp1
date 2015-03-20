@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 
 public class main {
 	
-	//test git
 	
 	private static String fileName = "textfiles/Ligue.ucd";
 	private static TextParser textParser;
@@ -28,6 +27,8 @@ public class main {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("UML viewer");
 		frame.setVisible(true);
+		
+		
 
 	}
 

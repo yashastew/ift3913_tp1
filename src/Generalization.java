@@ -31,6 +31,10 @@ public class Generalization extends Declaration {
 		this.parentClass = parentClass;
 	}
 
+	public String getIdentifier() {
+		return "";
+	}
+
 	
 
 	

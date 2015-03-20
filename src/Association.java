@@ -23,6 +23,14 @@ public class Association extends Declaration {
 	
 	
 	//Getters and setters
+	
+	public ClassDec getRoleOne(){
+		return roles.get(0).getClassRole();
+	}
+	
+	public ClassDec getRoleTwo(){
+		return roles.get(1).getClassRole();
+	}
 
 	public String getIdentifier() {
 		return identifier;
