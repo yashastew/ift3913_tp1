@@ -4,7 +4,9 @@ import javax.swing.JFrame;
 
 
 
-public class Main {
+public class main {
+	
+	//test pour github
 	
 	private static String fileName = "textfiles/Ligue.ucd";
 	private static TextParser textParser;
