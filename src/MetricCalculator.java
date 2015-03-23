@@ -14,15 +14,55 @@ public class MetricCalculator {
 	
 	public void calculateMetric(String identifier){
 		
-		int CAC = 0;
+		int CAC, NOC, NOD;
 		ClassDec classDec = getClassDecById(identifier);
 		println("\n########################\nMétriques\n########################");
 		println("\nClasse: " + identifier);
 		
 		CAC = calculateCAC(classDec);
+		NOC = calculateNOC(classDec);
+		NOD = calculateNOD(classDec);
 		
 		println("CAC: " + CAC);
+		println("NOC: " + NOC);
+		println("NOD: " + NOD);
 		
+	}
+	
+	private int calculateNOD(ClassDec classDec){
+		int NOD = 0;
+		ArrayList<ClassDec> subClasses = new ArrayList<ClassDec>();
+		
+		//Trouver le nombre d'enfant
+		for (Declaration declaration : declarationList) {
+			if (declaration instanceof Generalization){
+				Generalization generalization = (Generalization)declaration;
+				if(generalization.getParentClass() == classDec){
+					subClasses = generalization.getSubClasses();
+					NOD += subClasses.size();
+					//Appels récursifs
+					for (ClassDec subClass : subClasses) {
+						NOD += calculateNOD(subClass);
+					}
+				}
+			}			
+		}
+		return NOD;
+	}
+	
+	private int calculateNOC(ClassDec classDec){
+		int NOC = 0;
+		
+		for (Declaration declaration : declarationList) {
+			if (declaration instanceof Generalization){
+				Generalization generalization = (Generalization)declaration;
+				if(generalization.getParentClass() == classDec)
+					NOC += generalization.getSubClasses().size();
+			}			
+		}
+		
+		
+		return NOC;
 	}
 	
 	private int calculateCAC(ClassDec classDec){
