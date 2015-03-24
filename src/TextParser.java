@@ -58,6 +58,12 @@ public class TextParser {
 
 	}
 	
+	
+	public String[] getMetricsArray(String identifier){
+		String[] metrics= metricCalculator.getMetricArray(identifier);
+		return metrics;
+	}
+	
 	public void calculateMetric(String identifier){
 		metricCalculator.calculateMetric(identifier);
 	}

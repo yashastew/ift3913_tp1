@@ -11,6 +11,16 @@ public class MetricCalculator {
 		this.declarationList = declarationList;
 	}
 	
+	public String[] getMetricArray(String identifier){
+		String CAC, NOC, NOD;
+		ClassDec classDec = getClassDecById(identifier);
+
+		CAC = "CAC="+calculateCAC(classDec);
+		NOC = "NOC="+calculateNOC(classDec);
+		NOD = "NOD="+calculateNOD(classDec);
+		String[] metricsArray= {CAC, NOC, NOD};
+		return metricsArray;
+	}
 	
 	public void calculateMetric(String identifier){
 		

@@ -20,7 +20,7 @@ import javax.swing.event.ListSelectionListener;
 
 public class GUI extends JFrame {
 	private static final int FRAME_HEIGHT = 430;
-	private static final int FRAME_WIDTH = 500;
+	private static final int FRAME_WIDTH = 650;
 
 	private int selectedClass = 0;
 	private int selectedAsso = 0;
@@ -35,6 +35,7 @@ public class GUI extends JFrame {
 	private JList<String> sousClassesList;
 	private JList<String> associationsList;
 	private JList<String> detailsList;
+	private JList<String> metricsList;
 
 	private DefaultListModel<String> classes = new DefaultListModel<String>();
 	private DefaultListModel<String> methodes = new DefaultListModel<String>();
@@ -42,6 +43,7 @@ public class GUI extends JFrame {
 	private DefaultListModel<String> sousClasses = new DefaultListModel<String>();
 	private DefaultListModel<String> associations = new DefaultListModel<String>();
 	private DefaultListModel<String> details = new DefaultListModel<String>();
+	private DefaultListModel<String> metrics= new DefaultListModel<String>();
 
 	public GUI(TextParser tp) {
 		this.tp = tp;
@@ -49,7 +51,7 @@ public class GUI extends JFrame {
 		createComponents();
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 	}
-
+	
 	// initialise les noms des classes
 	private void setClassNames() {
 		classes.clear();
@@ -59,7 +61,14 @@ public class GUI extends JFrame {
 			}
 		}
 	}
-
+	private void updateMetrics(){
+		metrics.clear();
+		String[] tempMetrics= tp.getMetricsArray(classes.getElementAt(selectedClass));
+		for(int i=0; i<tempMetrics.length; i++){
+			metrics.addElement(tempMetrics[i]);
+		}
+		
+	}
 	private void clearDetails() {
 		details.clear();
 	}
@@ -251,6 +260,7 @@ public class GUI extends JFrame {
 		sousClassesList = new JList<String>(sousClasses);
 		associationsList = new JList<String>(associations);
 		detailsList = new JList<String>(details);
+		metricsList= new JList<String>(metrics);
 
 		setVisiblePanelSize();
 		createFChooserPanel();
@@ -273,7 +283,15 @@ public class GUI extends JFrame {
 		methodesList.setEnabled(false);
 		sousClassesList.setEnabled(false);
 		attributesList.setEnabled(false);
+		metricsList.setEnabled(false);
 
+		JPanel metricPanel= new JPanel();
+		JScrollPane jspmt= new JScrollPane(metricsList);
+		metricPanel.add(jspmt);
+		metricPanel.setBorder(new TitledBorder("Métriques"));
+		add(metricPanel, BorderLayout.EAST);
+		
+		
 		JPanel classePanel = new JPanel();
 		JScrollPane jspc = new JScrollPane(classesList);
 		classePanel.add(jspc);
@@ -328,6 +346,9 @@ public class GUI extends JFrame {
 
 	//ajuste la grandeur des JLists
 	private void setVisiblePanelSize() {
+				metricsList.setVisibleRowCount(17);
+				metricsList.setFixedCellWidth(100);
+				metricsList.setFixedCellHeight(18);
 				classesList.setVisibleRowCount(17);
 				classesList.setFixedCellWidth(100);
 				classesList.setFixedCellHeight(18);
@@ -362,6 +383,7 @@ public class GUI extends JFrame {
 				updateAttributes();
 				updateSubClasses();
 				updateAsso();
+				updateMetrics();
 				clearDetails();
 			}
 		}
