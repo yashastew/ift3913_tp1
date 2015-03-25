@@ -30,7 +30,7 @@ public class MetricCalculator {
 	
 	public void calculateMetric(String identifier){
 		
-		int CAC, NOC, NOD, NOM, NOA, ITC, ETC;
+		int CAC, NOC, NOD, NOM, NOA, ITC, ETC, DIT, CLD;
 		float ANA;
 		ClassDec classDec = getClassDecById(identifier);
 		println("\n########################\nMétriques\n########################");
