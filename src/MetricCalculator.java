@@ -58,6 +58,92 @@ public class MetricCalculator {
 		println("DIT: " + DIT);
 		
 	}
+	//ETC(ci) : Nombre de fois où ci apparaît comme type des arguments
+	//dans les méthodes des autres classes du diagramme
+	private int calculateETC(ClassDec classDec){
+		//System.out.println("CHECKING ETC for:"+ classDec.getIdentifier());
+		int ETC=0;
+		for(Declaration d: declarationList){
+			if(d instanceof ClassDec){
+				//System.out.println("Class: "+ ((ClassDec)d).getIdentifier());
+				for(Operation op: ((ClassDec)d).getOperations()){
+					for(DataItem di: op.getArgs()){
+						if(di.getType().equals(classDec.getIdentifier())){
+							ETC++;
+							//System.out.println("usage found");
+						}
+					}
+				}
+			}
+		}
+		return ETC;
+	}
+	
+	//ITC(ci) : Nombre de fois où d’autres classes du diagramme
+	//apparaissent comme types des arguments des méthodes de ci.
+	private int calculateITC(ClassDec classDec){
+		ClassDec currentClass=classDec;
+		ArrayList<String> stringDecs= new ArrayList<String>();
+		for(Declaration d: declarationList){
+			stringDecs.add(d.getIdentifier());
+		}
+		int ITC=0;
+		Set<Operation> uniqueMethodes = new HashSet<Operation>();
+		while(currentClass!= null){
+		for(Operation op: currentClass.getOperations()){
+			uniqueMethodes.add(op);
+		}
+		currentClass=getAncestor(currentClass);
+		}
+		for(Operation op: uniqueMethodes){
+			for( DataItem di :op.getArgs()){
+				if(stringDecs.contains(di.getType())) ITC++;
+			}
+		}
+		return ITC;
+	}
+	
+	
+	//number of attributes
+	private int calculateNOA(ClassDec classDec){
+		ClassDec currentClass=classDec;
+		int NOA=0;
+		while(currentClass != null){
+			NOA += currentClass.getAttributes().length;
+			//println("current class: "+ currentClass.getIdentifier());
+			for(int i=0;i<currentClass.getAttributes().length; i++){
+			//println("attribute name= "+ currentClass.getAttributes()[i].getIdentifier());	
+			}
+			currentClass=getAncestor(currentClass);
+		}
+		
+		return NOA;
+	}
+	//number of methodes including inherited UNLESS redefined
+	//unique methodes should contain ALL the unique methodes and eleminate repetition 
+	//via redefinition
+	private int calculateNOM(ClassDec classDec){
+		ClassDec currentClass=classDec;
+		int NOM=0;
+		Set<Operation> uniqueMethodes = new HashSet<Operation>();
+		while(currentClass!= null){
+		for(Operation op: currentClass.getOperations()){
+			uniqueMethodes.add(op);
+		}
+		currentClass=getAncestor(currentClass);
+		}
+		NOM= uniqueMethodes.size();
+		return NOM;
+	}
+	
+	//average number of arguments
+	private float calculateANA(ClassDec classDec){
+		float ANA=0;
+		int totalArgs=classDec.totalMethodeArguments();
+		int totalMeth=classDec.totalMethodes();
+		if(totalMeth != 0) ANA= ((float)totalArgs)/((float)totalMeth);
+		return ANA;
+	}
 	
 	private int calculateDIT(ClassDec classDec){
 		int DIT = 0;

@@ -29,6 +29,10 @@ public class Operation {
 	public String getType() {
 		return type;
 	}
+	//gets the number of arguments the operation takes
+	public int numArgs(){
+		return argList.size();
+	}
 
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
