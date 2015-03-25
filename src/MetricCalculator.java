@@ -44,6 +44,7 @@ public class MetricCalculator {
 		CAC = calculateCAC(classDec);
 		NOC = calculateNOC(classDec);
 		NOD = calculateNOD(classDec);
+		DIT = calculateDIT(classDec);
 		
 		println("ANA: " + ANA);
 		println("NOM: " + NOM);
@@ -53,8 +54,25 @@ public class MetricCalculator {
 		println("CAC: " + CAC);
 		println("NOC: " + NOC);
 		println("NOD: " + NOD);
+		println("DIT: " + DIT);
 		
 	}
+	
+	private int calculateDIT(ClassDec classDec){
+		int DIT = 0;
+		
+		ClassDec ancestor = getAncestor(classDec);
+		
+		while (null != ancestor){
+			DIT++;
+			classDec = ancestor;
+			ancestor = getAncestor(classDec);
+			
+		}
+		
+		return DIT;
+	}
+	
 	//ETC(ci) : Nombre de fois où ci apparaît comme type des arguments
 	//dans les méthodes des autres classes du diagramme
 	private int calculateETC(ClassDec classDec){
@@ -141,9 +159,6 @@ public class MetricCalculator {
 		if(totalMeth != 0) ANA= ((float)totalArgs)/((float)totalMeth);
 		return ANA;
 	}
-
-	
-
 
 	
 	private int calculateNOD(ClassDec classDec){

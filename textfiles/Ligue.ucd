@@ -60,7 +60,7 @@ GENERALIZATION SupremeClass
 ;
 
 GENERALIZATION RandomClass
-	SUBCLASSES SupremeClass, Stade
+	SUBCLASSES SupremeClass
 ;
 
 RELATION est_localisee_a 
