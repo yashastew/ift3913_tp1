@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.event.AncestorEvent;
 
@@ -11,22 +13,56 @@ public class MetricCalculator {
 		this.declarationList = declarationList;
 	}
 	
+	public String[] getMetricArray(String identifier){
+		String CAC, NOC, NOD, ANA, NOM, NOA, ITC, ETC;
+		ClassDec classDec = getClassDecById(identifier);
+		ANA= "ANA="+calculateANA(classDec);
+		NOM= "NOM="+calculateNOM(classDec);
+		NOA= "NOA="+calculateNOA(classDec);
+		ITC= "ITC="+calculateITC(classDec);
+		ETC= "ETC="+calculateETC(classDec);
+		CAC = "CAC="+calculateCAC(classDec);
+		NOC = "NOC="+calculateNOC(classDec);
+		NOD = "NOD="+calculateNOD(classDec);
+		String[] metricsArray= {ANA, NOM, NOA, ITC, ETC, CAC, NOC, NOD};
+		return metricsArray;
+	}
 	
 	public void calculateMetric(String identifier){
 		
-		int CAC, NOC, NOD;
+		int DIT;
+		int CAC, NOC, NOD, NOM, NOA, ITC, ETC;
+		float ANA;
 		ClassDec classDec = getClassDecById(identifier);
 		println("\n########################\nMétriques\n########################");
 		println("\nClasse: " + identifier);
 		
+		ANA = calculateANA(classDec);
+		NOM= calculateNOM(classDec);
+		NOA = calculateNOA(classDec);
+		ITC = calculateITC(classDec);
+		ETC = calculateETC(classDec);
 		CAC = calculateCAC(classDec);
 		NOC = calculateNOC(classDec);
 		NOD = calculateNOD(classDec);
+		DIT = calculateDIT(classDec);
 		
+		println("ANA: " + ANA);
+		println("NOM: " + NOM);
+		println("NOA: " + NOA);
+		println("ITC: " + ITC);
+		println("ETC: " + ETC);
 		println("CAC: " + CAC);
 		println("NOC: " + NOC);
 		println("NOD: " + NOD);
+		println("DIT: " + DIT);
 		
+	}
+	
+	private int calculateDIT(ClassDec classDec){
+		int DIT = 0;
+		
+		return DIT;
 	}
 	
 	private int calculateNOD(ClassDec classDec){
