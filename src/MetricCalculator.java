@@ -30,7 +30,6 @@ public class MetricCalculator {
 	
 	public void calculateMetric(String identifier){
 		
-		int DIT;
 		int CAC, NOC, NOD, NOM, NOA, ITC, ETC;
 		float ANA;
 		ClassDec classDec = getClassDecById(identifier);
@@ -45,7 +44,6 @@ public class MetricCalculator {
 		CAC = calculateCAC(classDec);
 		NOC = calculateNOC(classDec);
 		NOD = calculateNOD(classDec);
-		DIT = calculateDIT(classDec);
 		
 		println("ANA: " + ANA);
 		println("NOM: " + NOM);
@@ -55,7 +53,6 @@ public class MetricCalculator {
 		println("CAC: " + CAC);
 		println("NOC: " + NOC);
 		println("NOD: " + NOD);
-		println("DIT: " + DIT);
 		
 	}
 	//ETC(ci) : Nombre de fois où ci apparaît comme type des arguments
@@ -144,12 +141,10 @@ public class MetricCalculator {
 		if(totalMeth != 0) ANA= ((float)totalArgs)/((float)totalMeth);
 		return ANA;
 	}
+
 	
-	private int calculateDIT(ClassDec classDec){
-		int DIT = 0;
-		
-		return DIT;
-	}
+
+
 	
 	private int calculateNOD(ClassDec classDec){
 		int NOD = 0;
