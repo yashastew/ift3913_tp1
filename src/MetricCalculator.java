@@ -45,6 +45,7 @@ public class MetricCalculator {
 		NOC = calculateNOC(classDec);
 		NOD = calculateNOD(classDec);
 		DIT = calculateDIT(classDec);
+		CLD = calculateCLD(classDec);
 		
 		println("ANA: " + ANA);
 		println("NOM: " + NOM);
@@ -55,7 +56,38 @@ public class MetricCalculator {
 		println("NOC: " + NOC);
 		println("NOD: " + NOD);
 		println("DIT: " + DIT);
+		println("CLD: " + CLD);
 		
+	}
+	
+	private int calculateCLD(ClassDec classDec){
+		int CLD = 0;
+		
+		ClassDec nextChild = null;
+		
+		ArrayList<ClassDec> children = getChildren(classDec);
+		
+		println("Inside " + classDec.getIdentifier());
+		
+		if(children.size() == 0) return 0;
+		
+		int longestPath = 0;
+		for (ClassDec child : children) {
+			
+			int pathSize = calculateCLD(child);
+			if (pathSize > longestPath){
+				longestPath = pathSize;
+				nextChild = child;
+			}
+			
+		}
+		
+		if(null != nextChild)
+			println("Next Child : " + nextChild.getIdentifier());
+		
+		
+		
+		return longestPath + 1;
 	}
 	
 	private int calculateDIT(ClassDec classDec){
@@ -262,6 +294,25 @@ public class MetricCalculator {
 		return false;
 	}
 	*/
+	
+	private ArrayList<ClassDec> getChildren (ClassDec classDec){
+		
+		ArrayList<ClassDec> children = new ArrayList<ClassDec>();
+		
+		if(classDec == null)
+			return children;
+		
+		for (Declaration declaration : declarationList) {
+			
+			if (declaration instanceof Generalization){
+				Generalization generalization = (Generalization) declaration;
+				if (generalization.getParentClass() == classDec){
+					children.addAll(generalization.getSubClasses());
+				}
+			}			
+		}
+		return children;	
+	}
 	
 	//Retourne null s'il n'y a pas d'ancêtre
 	private ClassDec getAncestor(ClassDec classDec){

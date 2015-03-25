@@ -19,6 +19,8 @@ ATTRIBUTES
 OPERATIONS 
 ;
 
+
+
 CLASS RandomClass
 ATTRIBUTES 
 OPERATIONS 
@@ -51,12 +53,11 @@ GENERALIZATION Participant
 	SUBCLASSES Joueur, Entraineur, Equipe
 ;
 
-GENERALIZATION Joueur
-	SUBCLASSES Stade
-;
+
+
 
 GENERALIZATION SupremeClass
-	SUBCLASSES Participant
+	SUBCLASSES Participant, Stade
 ;
 
 GENERALIZATION RandomClass
