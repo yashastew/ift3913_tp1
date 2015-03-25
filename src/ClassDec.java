@@ -19,6 +19,18 @@ public class ClassDec extends Declaration {
 		
 	}
 	
+	public int totalMethodes(){
+		return operationList.size();
+	}
+	
+	public int totalMethodeArguments(){
+		int totalArgs=0;
+		for(Operation op: operationList){
+			totalArgs+= op.numArgs();
+		}
+		return totalArgs;
+	}
+	
 	public void addAttribute(DataItem attribute){
 		attributeList.add(attribute);
 	}

@@ -12,31 +12,42 @@ public class MetricCalculator {
 	}
 	
 	public String[] getMetricArray(String identifier){
-		String CAC, NOC, NOD;
+		String CAC, NOC, NOD, ANA;
 		ClassDec classDec = getClassDecById(identifier);
-
+		ANA= "ANA="+calculateANA(classDec);
 		CAC = "CAC="+calculateCAC(classDec);
 		NOC = "NOC="+calculateNOC(classDec);
 		NOD = "NOD="+calculateNOD(classDec);
-		String[] metricsArray= {CAC, NOC, NOD};
+		String[] metricsArray= {ANA, CAC, NOC, NOD};
 		return metricsArray;
 	}
 	
 	public void calculateMetric(String identifier){
 		
 		int CAC, NOC, NOD;
+		float ANA;
 		ClassDec classDec = getClassDecById(identifier);
 		println("\n########################\nMétriques\n########################");
 		println("\nClasse: " + identifier);
 		
+		ANA = calculateANA(classDec);
 		CAC = calculateCAC(classDec);
 		NOC = calculateNOC(classDec);
 		NOD = calculateNOD(classDec);
 		
+		println("ANA: " + ANA);
 		println("CAC: " + CAC);
 		println("NOC: " + NOC);
 		println("NOD: " + NOD);
 		
+	}
+	//average number of arguments
+	private float calculateANA(ClassDec classDec){
+		float ANA=0;
+		int totalArgs=classDec.totalMethodeArguments();
+		int totalMeth=classDec.totalMethodes();
+		if(totalMeth != 0) ANA= ((float)totalArgs)/((float)totalMeth);
+		return ANA;
 	}
 	
 	private int calculateNOD(ClassDec classDec){
