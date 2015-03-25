@@ -217,7 +217,7 @@ public class GUI extends JFrame {
 						String elem = "";
 						elem = o.getType() + " " + o.getIdentifier() + "(";
 						for (DataItem di : o.getArgs()) {
-							elem += di.getIdentifier() + ", ";
+							elem += di.getType() + ", ";
 						}
 						if (!o.getArgs().isEmpty())
 							elem = elem.substring(0, elem.length() - 2);

@@ -44,5 +44,19 @@ public class Operation {
 	public ArrayList<DataItem> getArgs(){
 		return argList;
 	}
+	//@Override
+	//on verifies qu'ils ont les memes type et identifiant
+	//et que les arg list sont "pareils" qu'ils contennent les
+	//memes elements - sans sucier de l'ordre. il faut faire
+	// le test deux fois pour s'assurer que un n'est pas un
+	//sous ensemble de l'autre.
+	public boolean equals(Operation op){
+		if (identifier.trim().equals(op.getIdentifier().trim())
+				&& type.trim().equals(op.getType().trim())
+				&& argList.containsAll(op.getArgs())
+				&&op.getArgs().containsAll(argList)) return true;
+		return false;
+		
+	}
 
 }

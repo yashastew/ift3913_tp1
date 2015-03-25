@@ -10,8 +10,12 @@ public class DataItem {
 	}
 
 	
-	
-	
+	//@Override
+	public boolean equals(DataItem di){
+		if (identifier.trim().equals(di.getIdentifier().trim())
+				&& type.trim().equals(di.getType().trim())) return true;
+		return false;
+	}
 	//Getters and setters
 	public String getIdentifier() {
 		return identifier;
