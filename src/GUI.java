@@ -2,7 +2,12 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
@@ -21,6 +26,8 @@ import javax.swing.event.ListSelectionListener;
 public class GUI extends JFrame {
 	private static final int FRAME_HEIGHT = 430;
 	private static final int FRAME_WIDTH = 650;
+	
+	//private Path file= Paths.get
 
 	private int selectedClass = 0;
 	private int selectedAsso = 0;
@@ -28,6 +35,7 @@ public class GUI extends JFrame {
 	private TextParser tp;
 
 	private JButton chargerButton;
+	private JButton metricsButton;
 	private JTextField fileToLoadField;
 	private JList<String> classesList;
 	private JList<String> methodesList;
@@ -50,6 +58,15 @@ public class GUI extends JFrame {
 		setClassNames();
 		createComponents();
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+	}
+	private String makeMetricsFile(){
+		String bigString="CLASS, ANA, NOM, NOA, ITC, ETC, CAC, NOC, NOD, DIT, CLD \n";
+		for (Declaration d : tp.getDeclarationList()) {
+			if (d instanceof ClassDec) {
+				bigString += tp.makeMetricLine(((ClassDec)d).getIdentifier())+"\n";
+			}
+		}
+		return bigString;
 	}
 	
 	// initialise les noms des classes
@@ -233,9 +250,10 @@ public class GUI extends JFrame {
 	//cree et met les valeurs initiales 
 	private void createComponents() {
 		chargerButton = new JButton("Charger");
+		metricsButton= new JButton("Calculer métriques" );
 		fileToLoadField = new JTextField(10);
 		fileToLoadField.setText("Ligue.ucd");
-		final JFileChooser fc = new JFileChooser();
+		final JFileChooser fc = new JFileChooser();//should go at top of code?
 
 		chargerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -251,6 +269,24 @@ public class GUI extends JFrame {
 					e.printStackTrace();
 				}
 
+			}
+		});
+		
+		metricsButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent){
+				fc.showSaveDialog(GUI.this);
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				//tp = new TextParser();
+				//tp.setFileName(fc.getSelectedFile().toString());
+				Path file= Paths.get(fc.getSelectedFile().toString());
+				//Path file = "\metrics.txt";
+				Charset charset = Charset.forName("UTF-8");
+				String s = makeMetricsFile();
+				try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
+				    writer.write(s, 0, s.length());
+				} catch (IOException x) {
+				    System.err.format("IOException: %s%n", x);
+				}
 			}
 		});
 		//initilise les JLists
@@ -340,6 +376,7 @@ public class GUI extends JFrame {
 		JPanel chooseFPanel = new JPanel();
 		chooseFPanel.add(chargerButton);
 		chooseFPanel.add(fileToLoadField);
+		chooseFPanel.add(metricsButton);
 		add(chooseFPanel, BorderLayout.NORTH);
 		
 	}

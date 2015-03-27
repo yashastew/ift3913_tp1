@@ -14,9 +14,9 @@ public class MetricCalculator {
 	}
 	
 	public String[] getMetricArray(String identifier){
-		String CAC, NOC, NOD, ANA, NOM, NOA, ITC, ETC;
+		String CAC, NOC, NOD, ANA, NOM, NOA, ITC, ETC, DIT, CLD;
 		ClassDec classDec = getClassDecById(identifier);
-		ANA= "ANA="+calculateANA(classDec);
+		ANA= String.format("ANA=%.3f", calculateANA(classDec));
 		NOM= "NOM="+calculateNOM(classDec);
 		NOA= "NOA="+calculateNOA(classDec);
 		ITC= "ITC="+calculateITC(classDec);
@@ -24,7 +24,9 @@ public class MetricCalculator {
 		CAC = "CAC="+calculateCAC(classDec);
 		NOC = "NOC="+calculateNOC(classDec);
 		NOD = "NOD="+calculateNOD(classDec);
-		String[] metricsArray= {ANA, NOM, NOA, ITC, ETC, CAC, NOC, NOD};
+		DIT = "DIT="+calculateDIT(classDec);
+		CLD = "CLD="+calculateCLD(classDec);
+		String[] metricsArray= {ANA, NOM, NOA, ITC, ETC, CAC, NOC, NOD, DIT, CLD};
 		return metricsArray;
 	}
 	
@@ -59,6 +61,15 @@ public class MetricCalculator {
 		println("CLD: " + CLD);
 		
 	}
+public String makeMetricLine(String identifier){
+	String line="";
+	ClassDec classDec = getClassDecById(identifier);
+	line=classDec.getIdentifier()+", "+calculateANA(classDec)+", "+calculateNOM(classDec)+", "+calculateNOA(classDec)
+			+", "+calculateITC(classDec)+", "+calculateETC(classDec)+", "+calculateCAC(classDec)+", "+calculateNOC(classDec)
+			+", "+calculateNOD(classDec)+", "+calculateDIT(classDec)+", "+calculateCLD(classDec);
+	return line;
+	
+}
 	
 	private int calculateCLD(ClassDec classDec){
 		int CLD = 0;

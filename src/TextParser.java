@@ -67,6 +67,10 @@ public class TextParser {
 	public void calculateMetric(String identifier){
 		metricCalculator.calculateMetric(identifier);
 	}
+	public String makeMetricLine(String identifier){
+		String metrics= metricCalculator.makeMetricLine(identifier);
+		return metrics;
+	}
 	
  	private int parseClass(int i){
 		i++;
