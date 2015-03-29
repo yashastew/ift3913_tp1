@@ -257,7 +257,9 @@ public class GUI extends JFrame {
 
 		chargerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				fc.showOpenDialog(GUI.this);
+				if(actionEvent.getSource()== chargerButton){
+				int returnVal=fc.showOpenDialog(GUI.this);
+				if(returnVal ==JFileChooser.APPROVE_OPTION){
 				tp = new TextParser();
 				tp.setFileName(fc.getSelectedFile().toString());
 				fileToLoadField.setText(fc.getSelectedFile().toString());
@@ -268,16 +270,21 @@ public class GUI extends JFrame {
 					System.out.println("Could not read file");
 					e.printStackTrace();
 				}
+				}
+				}
 
 			}
 		});
 		
 		metricsButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent actionEvent){
-				fc.showSaveDialog(GUI.this);
-				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+				if(actionEvent.getSource() ==metricsButton){
+					int returnVal= fc.showSaveDialog(GUI.this);
+					fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				//tp = new TextParser();
 				//tp.setFileName(fc.getSelectedFile().toString());
+					if(returnVal ==JFileChooser.APPROVE_OPTION){
 				Path file= Paths.get(fc.getSelectedFile().toString());
 				//Path file = "\metrics.txt";
 				Charset charset = Charset.forName("UTF-8");
@@ -287,6 +294,8 @@ public class GUI extends JFrame {
 				} catch (IOException x) {
 				    System.err.format("IOException: %s%n", x);
 				}
+					}
+			}
 			}
 		});
 		//initilise les JLists
