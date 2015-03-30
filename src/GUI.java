@@ -27,7 +27,6 @@ public class GUI extends JFrame {
 	private static final int FRAME_HEIGHT = 430;
 	private static final int FRAME_WIDTH = 650;
 	
-	//private Path file= Paths.get
 
 	private int selectedClass = 0;
 	private int selectedAsso = 0;
@@ -253,7 +252,7 @@ public class GUI extends JFrame {
 		metricsButton= new JButton("Calculer métriques" );
 		fileToLoadField = new JTextField(10);
 		fileToLoadField.setText("Ligue.ucd");
-		final JFileChooser fc = new JFileChooser();//should go at top of code?
+		final JFileChooser fc = new JFileChooser();
 
 		chargerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {

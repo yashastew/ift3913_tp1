@@ -177,7 +177,7 @@ public String makeMetricLine(String identifier){
 		
 		return NOA;
 	}
-	//number of methodes including inherited UNLESS redefined
+	//number of methodes: including inherited UNLESS redefined
 	//unique methodes should contain ALL the unique methodes and eleminate repetition 
 	//via redefinition
 	private int calculateNOM(ClassDec classDec){
